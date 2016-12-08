@@ -1,11 +1,15 @@
-#!/bin/bash -xe
+#!/bin/bash -x
+
+set -e
 
 real_path=$(realpath $0)
 cd ${real_path%/*}
 
-source env-config.sh
-BIFROST_GIT_URL=${BIFROST_GIT_URL:-"https://github.com/openstack/bifrost"}
-BIFROST_GIT_BRANCH="master"
+source configs/env-config.sh
+export BIFROST_GIT_URL=${BIFROST_GIT_URL:-"https://github.com/openstack/bifrost"}
+export BIFROST_GIT_BRANCH=${BIFROST_GIT_BRANCH:-"master"}
+export ANSIBLE_FROM_PYPI="True"
+export CONDUCTOR_KEY=${CONDUCTOR_KEY:-""}
 
 # Install initial requirments
 sudo apt update -y
@@ -28,18 +32,20 @@ if [[ -d bifrost ]]; then
     git pull --rebase origin ${BIFROST_GIT_BRANCH}
     popd
 else
-    git clone -b ${BIFROST_GIT_BRANCH} ${BIFROST_GIT_URL}
+    git clone -b ${BIFROST_GIT_BRANCH} ${BIFROST_GIT_URL} bifrost
 fi
 
 # Install bifrost
-export ANSIBLE_FROM_PYPI="True"
 bash -x ./bifrost/scripts/env-setup.sh
 
 # Configure bifrost
 rm -f bifrost/playbooks/inventory/group_vars/*
-cp group_vars/* bifrost/playbooks/inventory/group_vars/
+cp group_vars/all bifrost/playbooks/inventory/group_vars/all
+cp configs/group_vars/* bifrost/playbooks/inventory/group_vars/
 
 # Install Ironic
 pushd bifrost/playbooks
 ansible-playbook -vvvv -i inventory/localhost install.yaml
 popd
+
+echo "${CONDUCTOR_KEY}" /home/ironic/.ssh/id_rsa

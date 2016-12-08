@@ -6,9 +6,9 @@ mysql_username: root
 mysql_password:
 testing: false
 ipa_kernel: "{{http_boot_folder}}/deploy_kernel"
-ipa_ramdisk: "{{http_boot_folder}}/deploy_initramfs"
+ipa_ramdisk: "{{http_boot_folder}}/deploy_ramdisk"
 ipa_kernel_url: "{{ ipa_file_protocol }}://{{ hostvars[inventory_hostname]['ansible_' + ans_network_interface]['ipv4']['address'] }}:{{file_url_port}}/deploy_kernel"
-ipa_ramdisk_url: "{{ ipa_file_protocol }}://{{ hostvars[inventory_hostname]['ansible_' + ans_network_interface]['ipv4']['address'] }}:{{file_url_port}}/deploy_initramfs"
+ipa_ramdisk_url: "{{ ipa_file_protocol }}://{{ hostvars[inventory_hostname]['ansible_' + ans_network_interface]['ipv4']['address'] }}:{{file_url_port}}/deploy_ramdisk"
 create_image_via_dib: false
 transform_boot_image: false
 create_ipa_image: false

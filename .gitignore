@@ -1,4 +1,1 @@
-env-config.sh
-seed_key.rsa
-seed_key.rsa.pub
-group_vars/localhost
+heimdall/configs/*
