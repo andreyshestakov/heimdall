@@ -1,0 +1,21 @@
+---
+network_interface: "ens4"
+ironic_url: "http://{{ network_interface }}:6385/"
+ironic_db_password: password
+mysql_username: root
+mysql_password:
+testing: false
+ipa_kernel: "{{http_boot_folder}}/deploy_kernel"
+ipa_ramdisk: "{{http_boot_folder}}/deploy_initramfs"
+ipa_kernel_url: "{{ ipa_file_protocol }}://{{ hostvars[inventory_hostname]['ansible_' + ans_network_interface]['ipv4']['address'] }}:{{file_url_port}}/deploy_kernel"
+ipa_ramdisk_url: "{{ ipa_file_protocol }}://{{ hostvars[inventory_hostname]['ansible_' + ans_network_interface]['ipv4']['address'] }}:{{file_url_port}}/deploy_initramfs"
+create_image_via_dib: false
+transform_boot_image: false
+create_ipa_image: false
+ironicclient_source_install: true
+ironicinspector_source_install: true
+ironicinspectorclient_source_install: true
+ironicstagingdrivers_source_install: true
+install_staging_drivers: true
+enabled_drivers: fake_ansible
+pxe_drivers: pxe_ipmitool_ansible,pxe_libvirt_ansible,pxe_ssh_ansible
